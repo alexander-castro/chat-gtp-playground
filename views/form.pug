@@ -1,0 +1,14 @@
+html
+   head
+      title Work description to skills
+      style
+        include style.css
+   body
+      form(action = "/", method = "POST")
+         div
+            label(for = "job") Job description:
+            br
+            br
+            textarea(name = "job" value = "" rows="6" cols="70")
+         br
+         button(type = "submit") Process
