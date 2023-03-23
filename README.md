@@ -1,3 +1,3 @@
 # Chat GTP Playground
 
-You need to create a .env file with the variable OPEN_AI_API_KEY.
+You need to create a .env file with the variable OPENAI_API_KEY.
