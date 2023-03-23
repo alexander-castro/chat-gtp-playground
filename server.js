@@ -24,19 +24,29 @@ app.get('/', function(req, res){
 });
 
 app.post('/', async (req, res) => {
+  skillsPrompt = `Extract a list of granullar skills for this job offert each skill can only have max ten words and separated with a comma:\n\n ${req.body.job}`
+  skillResponseText = await sendChatGTPRequest(skillsPrompt)
+  skills = skillResponseText.substring(0, skillResponseText.length - 1).split(",")
+
+  otherSkillsPrompt = `Give me a list of granullar skills for this job offert each skill can only have max ten words and separated with a comma not mentioned in the text:\n\n ${req.body.job}`,
+  othersSkillResponseText = await sendChatGTPRequest(otherSkillsPrompt)
+  otherSkills = othersSkillResponseText.substring(0, othersSkillResponseText.length - 1).split(",")
+
+  res.render('report', { job: req.body.job, skills: skills, otherSkills: otherSkills})
+})
+
+async function sendChatGTPRequest(prompt) {
   const response = await openai.createCompletion({
     model: "text-davinci-003",
-    prompt: `Extract a list of granullar skills for this job offert each skill can only have max ten words and separated with a comma:\n\n ${req.body.job}`,
+    prompt: prompt,
     temperature: 0.5,
     max_tokens: 60,
     top_p: 1.0,
     frequency_penalty: 0.8,
     presence_penalty: 0.0,
   });
-  text_response = response.data.choices[0].text
-  skills = text_response.substring(0, text_response.length - 1).split(",")
-  res.render('report', { job: req.body.job, skills: skills })
-})
+  return response.data.choices[0].text
+};
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`)

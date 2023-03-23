@@ -5,12 +5,16 @@ html
         include style.css
    body
          div
-            h3 Job description
+            h4 Job description
             p=job
          br
          div
-            h3 Skills
+            h3 Skills:
             ul
                each skill in skills
                   li=skill
+            h3 Other potencial skills:
+            ul
+               each otherSkill in otherSkills
+                  li=otherSkill
          br
