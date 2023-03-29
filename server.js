@@ -28,7 +28,7 @@ app.post('/', async (req, res) => {
   skillResponseText = await sendChatGTPRequest(skillsPrompt)
   skills = skillResponseText.substring(0, skillResponseText.length - 1).split(",")
 
-  otherSkillsPrompt = `Give me a list of granullar skills for this job offert each skill can only have max ten words and separated with a comma not mentioned in the text:\n\n ${req.body.job}`,
+  otherSkillsPrompt = `Give me a list of granullar skills for this job offert each skill can only have max ten words and separated with a comma not mentioned in the text:\n\n ${req.body.job}`
   othersSkillResponseText = await sendChatGTPRequest(otherSkillsPrompt)
   otherSkills = othersSkillResponseText.substring(0, othersSkillResponseText.length - 1).split(",")
 
@@ -36,16 +36,12 @@ app.post('/', async (req, res) => {
 })
 
 async function sendChatGTPRequest(prompt) {
-  const response = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: prompt,
-    temperature: 0.5,
-    max_tokens: 60,
-    top_p: 1.0,
-    frequency_penalty: 0.8,
-    presence_penalty: 0.0,
+  const response = await openai.createChatCompletion({
+    model: "gpt-4",
+    messages: [{role: "user", content: prompt}],
   });
-  return response.data.choices[0].text
+  console.log(response.data.choices[0])
+  return response.data.choices[0].message.content
 };
 
 app.listen(port, () => {
